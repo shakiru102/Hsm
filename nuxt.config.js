@@ -45,7 +45,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: process.env.PORT || 'http://localhost:3000'
+    baseURL: process.env.BASEURL || 'http://localhost:3000'
   },
   
   //pwa

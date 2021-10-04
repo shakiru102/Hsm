@@ -14,7 +14,7 @@ module.exports.signup = async (req, res) => {
 
         if(!user) throw Error('There is a problem creating this school account')
         const jwtToken = await token(user._id)
-        res.cookie('HSM', jwtToken, { maxAge:  1 * 24 * 60 * 60 * 1000, httpOnly: true, samSite: 'strict' })
+        res.cookie('HSM', jwtToken, { maxAge:  1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' })
         res.status(200).send('ok')
      
     } catch (error) {
@@ -31,10 +31,11 @@ module.exports.login = async (req, res) => {
         if(!verifyUser) throw Error('This is email does not exist')
         
         const verifyPassword = await bcrypt.compare( verifyUser.school_password , school_password)
+        console.log(verifyPassword)
         if(!verifyPassword) throw Error('Invalid password')
 
         const jwtToken = await token(user._id)
-        res.cookie('HSM', jwtToken, { maxAge:  1 * 24 * 60 * 60 * 1000, httpOnly: true, samSite: 'strict' })
+        res.cookie('HSM', jwtToken, { maxAge:  1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' })
         res.status(200).send('ok')
      
     } catch (error) {
