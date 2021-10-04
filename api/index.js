@@ -2,7 +2,7 @@ const { mongoose, express, cookieParser, env } = require("./modules");
 const hsmUser = require("./routes/hsmUser")
 const app = express(); 
 env.config()
-mongoose.connect('mongodb+srv://SAS1099:olashekoni@cluster0.hqgww.mongodb.net/Highschool_Manager', {
+mongoose.connect(process.env.MONGODB_URL, {
     useUnifiedTopology:true,
     useNewUrlParser: true,
 })
