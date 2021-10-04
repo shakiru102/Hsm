@@ -36,7 +36,7 @@
         <v-container class="">
             <v-row>
             <v-col>
-            <v-btn small type="submit"  elevation="" block  color="primary">login</v-btn>
+            <v-btn small type="submit"  :loading="loading"  elevation="" block  color="primary">login</v-btn>
             </v-col>
             <v-col>
             <v-btn small elevation="" block @click="logOption = !logOption"  color="success">signup</v-btn>

@@ -21,9 +21,6 @@ export const mutations = {
     },
     setSnackBar(state, payload) {
         if(payload)  state.snackBarProps = payload
-        state.snackBarvisibility = !state.snackBarVisibility
-
-        setTimeout(() => state.snackBarVisibility = false, 3 )
     },
     // setSnackActive(state){
     //     state.snackBarvisibility = !state.snackBarVisibility
