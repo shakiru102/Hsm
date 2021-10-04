@@ -7,6 +7,7 @@ const utils = () => {
    
     const nav = ref(true)
     const hiddenNav = ref(false)
+    const toggle = ref(false)
     const { store } = useContext()
     const date = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10))
     const menu =  ref([
@@ -28,6 +29,7 @@ const utils = () => {
         date,
         menu,
         logOption,
+        toggle
     }
 
 }

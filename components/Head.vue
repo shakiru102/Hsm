@@ -46,7 +46,7 @@
     </v-tooltip>
            <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-              <v-btn fab depressed large icon color="orange" v-on="on" v-bind="attrs" :class="`${ $store.state.theme ? ' plus_btn' : 'plus_btn_dark' }`" >
+              <v-btn @click="changeToggle"  fab depressed large icon color="orange" v-on="on" v-bind="attrs" :class="`${ $store.state.theme ? ' plus_btn' : 'plus_btn_dark' }`" >
                 <div class="plus"> + </div>
               </v-btn>
               </template>
@@ -80,6 +80,8 @@
 <script>
 import utils from '@/composables/utility'
 export default {
+  
+  props: ['changeToggle'],
     setup(props) {
         const { nav, rightBar,  changeTheme, menu } = utils()
         return {
