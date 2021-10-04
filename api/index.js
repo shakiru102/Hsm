@@ -4,7 +4,6 @@ const app = express();
 env.config()
 mongoose.connect(process.env.MONGODB_URL)
 .then(() => console.log('Connected to mongodb'))
-.catch( err => console.error(err.messsage))
 
 app.use(cookieParser()); 
 app.use(express.json()); 
