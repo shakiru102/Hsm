@@ -1,8 +1,8 @@
-const { mongoose, express, cookieParser } = require("./modules");
+const { mongoose, express, cookieParser, env } = require("./modules");
 const hsmUser = require("./routes/hsmUser")
 const app = express(); 
-
-mongoose.connect(`${process.env.MONGODB_URL}`)
+env.config()
+mongoose.connect(process.env.MONGODB_URL)
 .then(() => console.log('Connected to mongodb'))
 .catch( err => console.error(err.messsage))
 

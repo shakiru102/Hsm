@@ -1,5 +1,4 @@
 <template>
-  
     <v-footer
       dark
       padless
@@ -13,9 +12,6 @@
           </div>
         </v-container>
     </v-footer>
-  
-  
-  
 </template>
 
 <script>
