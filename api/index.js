@@ -2,8 +2,9 @@ const { mongoose, express, cookieParser } = require("./modules");
 const hsmUser = require("./routes/hsmUser")
 const app = express(); 
 
-mongoose.connect(process.env.MONGODB_URL)
+mongoose.connect(`${process.env.MONGODB_URL}`)
 .then(() => console.log('Connected to mongodb'))
+.catch( err => console.error(err.messsage))
 
 app.use(cookieParser()); 
 app.use(express.json()); 
