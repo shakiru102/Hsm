@@ -2,8 +2,9 @@ const { mongoose } = require("../modules");
  
 const termSchema = new mongoose.Schema({
     school_id: String,
-    duration: String,
-    students_level: [{ level: String, amount: String}],
+    from: String,
+    to: String,
+    students_level: [{ level: String, amount: Number}],
     term_name: String,
     date: { type: String, default: Date.now}
 })

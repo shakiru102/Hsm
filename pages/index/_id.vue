@@ -3,8 +3,18 @@
 </template>
 
 <script>
+import { onMounted } from '@vue/composition-api'
+import { useContext, useRouter } from '@nuxtjs/composition-api'
 export default {
-
+  setup(){
+    onMounted(() => {
+        const { store } = useContext()
+      if(store.state.hsm.current_term != ''){
+        const router = useRouter()
+        router.push('Dashboard')
+      }
+    })
+  }
 }
 </script>
 

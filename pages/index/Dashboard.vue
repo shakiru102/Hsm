@@ -2,7 +2,7 @@
  <v-container class="px-5">
     <v-row>
       <v-col>
-        <div>dashboard</div>
+        <div>{{ $store.state.hsm.current_term }}</div>
       </v-col>
     </v-row>
   </v-container>

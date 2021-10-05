@@ -18,7 +18,8 @@ module.exports.signup = async (req, res) => {
         res.status(200).send('ok')
      
     } catch (error) {
-        res.status(400).send({ error: error.message})
+      error.message.includes('Email') ?  res.status(400).send({ error: error.message})
+      :  res.status(400).send({ error: "An issue occured please try again"})
     }
 
 }
@@ -29,17 +30,17 @@ module.exports.login = async (req, res) => {
     try {
         const verifyUser = await hsmUser.findOne({ school_email })
         if(!verifyUser) throw Error('This is email does not exist')
-        
-        const verifyPassword = await bcrypt.compare( verifyUser.school_password , school_password)
-        console.log(verifyPassword)
+        const verifyPassword = await bcrypt.compare( school_password, verifyUser.school_password)
         if(!verifyPassword) throw Error('Invalid password')
 
-        const jwtToken = await token(user._id)
+        const jwtToken = await token(verifyUser._id)
         res.cookie('HSM', jwtToken, { maxAge:  1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' })
         res.status(200).send('ok')
      
     } catch (error) {
-        res.status(400).send({ error: error.message})
+        console.log(error)
+        error.message.includes('Email') ||  error.message.includes('password') ?  res.status(400).send({ error: error.message})
+        : res.status(400).send({ error: "An issue occured please try again"})
     }
 
 }
@@ -59,6 +60,7 @@ module.exports.auth = async (req, res) => {
             phonenumber: user.school_phonenum,
             current_term: user.current_term,
             payment_verified: user.payment_verified,
+            logo: user.logo
          })
     } catch (error) {
         res.status(400).send(error.message)

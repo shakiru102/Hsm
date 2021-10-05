@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const { v4:  uuid } = require('uuid')
+const joi = require('joi')
 
 
 module.exports = {
@@ -16,5 +17,6 @@ module.exports = {
     cookieParser,
     jwt,
     bcrypt,
-    uuid
+    uuid,
+    joi
 }

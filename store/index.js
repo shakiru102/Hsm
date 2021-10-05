@@ -2,11 +2,12 @@ export const state = () => ({
     theme: true,
     signOption: false,
     hsm: null,
-    snackBarvisibility: false,
     snackBarProps: {
        content: '',
        color: '',
-    }
+    },
+    currentTerm: null
+
 })
 
 export const mutations = {
@@ -18,11 +19,10 @@ export const mutations = {
     },
     setHsm(state, payload) {
        state.hsm = payload
+       console.log(state.hsm.curren_term)
     },
     setSnackBar(state, payload) {
         if(payload)  state.snackBarProps = payload
     },
-    // setSnackActive(state){
-    //     state.snackBarvisibility = !state.snackBarVisibility
-    // }
+   
 }

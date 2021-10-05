@@ -8,7 +8,6 @@
        timeout="3000"
    >
       <div class="text-center">{{$store.state.snackBarProps.content}}</div> 
-       <!-- <v-btn absolute right  text color="primary" @click.native="">Close</v-btn> -->
    </v-snackbar>
     <Hsm :changeBar="changeBar" />
        <v-container class="text-center">
