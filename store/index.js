@@ -6,9 +6,24 @@ export const state = () => ({
        content: '',
        color: '',
     },
-    currentTerm: null
+    currentTerm: null,
+    events: [],
+    allLevelDetails: []
 
 })
+
+export const getters = {
+    event(state) {
+        const date = []
+        state.events.forEach(item => date.push(item.event_date))
+        return date
+    },
+    eventColor(state) {
+        const color = []
+        state.events.forEach(item => color.push(item.event_color))
+        return color
+    },
+}
 
 export const mutations = {
     setTheme(state) {
@@ -19,10 +34,19 @@ export const mutations = {
     },
     setHsm(state, payload) {
        state.hsm = payload
-       console.log(state.hsm.curren_term)
     },
+    setEvent(state, payload) {
+        state.events = [ ...payload ]
+     },
     setSnackBar(state, payload) {
         if(payload)  state.snackBarProps = payload
     },
+    setCurrentTerm(state, payload) {
+        state.currentTerm = payload
+    },
+    setAllLevelDetails(state, payload) {
+        state.allLevelDetails = [ ...payload ]
+        console.log(state.allLevelDetails)
+     },
    
 }

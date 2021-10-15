@@ -1,26 +1,38 @@
 <template>
 <!-- <div></div> -->
-  <v-card class="content_div" tile flat :dark="!$store.state.theme">
-      <Head :changeToggle="changeToggle" />
+  <v-card class="content_div" :color="$store.state.theme ? '#F5F5F5' : ''"  tile flat :dark="!$store.state.theme">
+      <Head  :addEvent="addEvent" :snackbar="snackbar" :changeToggle="changeToggle" />
          <v-snackbar
        v-model="snackbar"
        :color="$store.state.snackBarProps.color"
        bottom
        timeout="3000"
    >
+    
+
       <div class="text-center">{{$store.state.snackBarProps.content}}</div> 
    </v-snackbar>
+   <v-snackbar
+       v-model="eventsnackbar"
+       :color="$store.state.snackBarProps.color"
+       bottom
+       timeout="3000"
+   >
+      <div class="text-center">{{$store.state.snackBarProps.content}}</div> 
+   </v-snackbar>
+   <!-- dialog for creating term  -->
        <v-dialog
          v-model="toggle"
          max-width="1000px"
-         transition="dialog-transition"
-         scrollable
+         transition="scroll-y-transition"
          persistent
        >
          <v-card
          :dark="!$store.state.theme"
+         :color="$store.state.theme ? '#F5F5F5' : ''"
+         class="px-16 pt-5"
          >
-            <div class="term"><span class="mt-3">CREATE TERM</span>  </div>
+            <div class="title font-weight-regular"><span class="">Create Term</span>  </div>
               <v-container class="">
                 <v-row>
                   <v-col cols="6">
@@ -101,19 +113,90 @@
               </v-card-actions>
          </v-card>
        </v-dialog>
+       <!-- routes children  -->
       <nuxt-child />
+      <!-- dialog fron events  -->
+ <v-dialog
+         v-model="eventToggle"
+         max-width="500px"
+         transition="slide-x-reverse-transition"
+       >
+         <v-card
+         tile
+         :dark="!$store.state.theme"
+         :color="$store.state.theme ? '#F5F5F5' : ''"
+         class="px-16 pt-8"
+         >
+          <div class="title font-weight-regular">Add Event</div>
+              <v-container >
+                 <v-row>
+                      <v-col cols="12">
+                     <v-text-field :error-messages="event_title_err" :color="!$store.state.theme ? '' :  '#37474F' "  v-model="event_title" dense label="Event Title" ></v-text-field>
+                   </v-col>
+                     <v-col cols="12">
+                     <v-textarea :error-messages="event_content_err" :color="!$store.state.theme ? '' :  '#37474F' "  v-model="event_content" auto-grow  rows="3"  label="Event Description" ></v-textarea>
+                   </v-col>
+                    <v-col cols="6">
+                          <v-menu offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field outlined  :error-messages="event_date_err" :color="!$store.state.theme ? '' :  '#37474F' " v-model="event_date" v-bind="attrs" v-on="on" dense label="Event Date" ></v-text-field>
+                            </template>
+                              <v-date-picker :dark="!$store.state.theme"   v-model="event_date"></v-date-picker>
+                          </v-menu>
+                   </v-col>
+                    <v-col cols="6">
+                          <v-menu offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field outlined  :error-messages="event_color_err" :color="!$store.state.theme ? '' :  '#37474F' " v-model="event_color" v-bind="attrs" v-on="on" dense label="Event Color" >
+                                <template v-slot:append>
+                                        <v-icon  :color="event_color">mdi-brush</v-icon>
+                                </template>
+                              </v-text-field>
+                            </template>
+                              <v-color-picker
+                                    :dark="!$store.state.theme"
+                                    v-model="event_color"
+                                  ></v-color-picker>
+                          </v-menu>
+                   </v-col>
+                 </v-row>
+               </v-container>
+               <v-card-actions>
+                     <v-btn small elevation="" :loading="eventloading"  @click="saveEvent" text color="primary">save</v-btn>
+                     <v-btn small elevation="" text  @click="eventToggle = false" color="error">cancel</v-btn>
+               </v-card-actions>
+         </v-card>
+       </v-dialog>
+
   </v-card>
 </template>
 
 <script>
 import utils from '@/composables/utility'
 import term from '@/composables/storeterm'
-
+import Eventapi from '@/composables/eventapi'
+import { useContext } from '@nuxtjs/composition-api'
+// import { ref, computed, watch } from "@vue/composition-api"
+// import moment from 'moment'
 export default {
-  middleware: "auth",
+  middleware: ["auth", "event"],
   
   setup(){
-
+     
+     const {
+        event_title,
+        event_color,
+        event_date,
+        event_content,
+        saveEvent,
+        eventloading,
+        event_title_err,
+        event_color_err,
+        event_date_err,
+        event_content_err,
+         eventToggle,
+         eventsnackbar
+     } = Eventapi()
      const { 
         deleteLevel, 
         disabled, 
@@ -132,9 +215,24 @@ export default {
         createterm,
         snackbar
                  } =  term()
+      const {store} =  useContext()
      const { toggle } =  utils()
+     const addEvent =   () => {
+       if(store.state.hsm.current_term == ''){
+             store.commit('setSnackBar', {
+                    content: 'Create term first',
+                    color: 'error' 
+                })
+                snackbar.value = !snackbar.value
+       }else{
+         eventToggle.value = !eventToggle.value
+       }
+     }
      const changeToggle = () => toggle.value = !toggle.value
-   return { 
+     
+
+return { 
+          eventsnackbar,
           deleteLevel, 
           disabled,
           changeToggle, 
@@ -152,7 +250,20 @@ export default {
           err_termfrom,
           err_termto,
           createterm,
-          snackbar
+          snackbar,
+          eventToggle,
+          addEvent,
+          store,
+          event_title,
+          event_color,
+          event_date,
+          event_content,
+          saveEvent,
+          eventloading,
+          event_title_err,
+          event_color_err,
+          event_date_err,
+          event_content_err,
                   }
   }
 }
@@ -160,10 +271,10 @@ export default {
 
 <style scoped>
 .content_div.v-card {
-  height: 86.5vh;
+  height: 87vh;
   overflow-y: scroll;
   -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  
+  scrollbar-width: none; 
 }
 .content_div.v-card::-webkit-scrollbar{
   display: none;
@@ -172,11 +283,9 @@ export default {
   height: 200vh;
 }
 .term{
-  font-family: Montserrat, sans-serif;
   font-size: 1.5em;
-  text-align: center;
-  font-weight: 500;
-  padding-top: 1em;
+  /* text-align: center; */
+  font-weight: 400;
 }
 .level_title{
   display: flex;

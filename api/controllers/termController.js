@@ -24,3 +24,14 @@ module.exports.saveterm = async (req, res) => {
    
     
 }
+
+module.exports.getTerm = async (req, res) => {
+        const { currentTerm } = req.query
+        try {
+        const Term = await term.findOne({_id: currentTerm})
+          res.status(200).json(Term)  
+        } catch (error) {
+            res.status(400).send('could not get term')
+        }
+
+}

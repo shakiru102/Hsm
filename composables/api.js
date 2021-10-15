@@ -7,15 +7,15 @@ const api = (changeBar) => {
         v => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/.test(v) || 'Password must contain at least lowercase letter, one number, a special character and one uppercase letter',
     ])
     const emailRule = ref([
-        v => ! !v || 'enter email',
+        v => !!v || 'enter email',
         v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
      ])
      const nameRule = ref([
-        v => ! !v || 'enter name',
+        v => !!v || 'enter name',
         v => /^[a-zA-Z]*$/.test(v) || ' enter a valid name'
     ])
     const numRule = ref([
-        v => ! !v || 'enter name',
+        v => !!v || 'enter name',
         v => /^\(?([0-9]{3})\)?[-.●\s]?([0-9]{3})[-.●\s]?([0-9]{4})/gm.test(v) || ' enter a valid phonenumber'
     
     ])

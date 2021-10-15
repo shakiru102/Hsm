@@ -10,6 +10,6 @@ const eventSchema = new mongoose.Schema({
     date: { type: String, default: Date.now}
 })
 
-const event = mongoose.model('term', eventSchema)
+const event = mongoose.model('events', eventSchema)
 
 module.exports = event
