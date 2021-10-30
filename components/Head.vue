@@ -6,8 +6,8 @@
        dark
        v-model="nav"
        >
-        <v-btn @click="changeTheme" block tile text class=" mb-16"  large :color="$store.state.theme ? 'yellow': ''" >
-            <v-icon >{{ $store.state.theme ? 'mdi-white-balance-sunny'  :' mdi-moon-waning-crescent'}} </v-icon>
+        <v-btn @click="changeTheme" block tile text  class=" mb-16" large >
+            <v-icon :color="$store.state.theme ? 'yellow': ''"  >{{ $store.state.theme ? 'mdi-white-balance-sunny'  :' mdi-moon-waning-crescent'}} </v-icon>
           </v-btn>
            <v-tooltip v-for="nav in menu" :key="nav.name"  right>
                <template v-slot:activator="{ on, attrs }">
@@ -145,6 +145,7 @@ export default {
 .plus_btn_dark.v-btn{
   box-shadow: 0px 10px  24px rgba(32, 31, 31, 0.562);
    margin: auto 15px auto 15px;
+   /* color: #5c6bc08c; */
 
 }
  .plus{
@@ -196,14 +197,14 @@ color: rgb(201, 197, 197);
   font-weight: 500;
 }
 .subContent{
-   font-size: 0.9em;
+   font-size: 0.7em;
   /* font-weight: 500; */
   margin-top: 0.5em; 
  color: grey;
  
 }
 .subContent_dark{
-   font-size: 0.9em;
+   font-size: 0.7em;
   /* font-weight: 500; */
   margin-top: 0.5em; 
 color: rgb(201, 197, 197);

@@ -12,6 +12,8 @@ const { mongoose } = require("../modules");
      payment_verified: Boolean,
      current_term: String,
      forgot_email: String,
+     theme: Boolean,
+     school_nameAbrr: String,
 
  })
 

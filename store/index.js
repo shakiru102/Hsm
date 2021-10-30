@@ -46,7 +46,6 @@ export const mutations = {
     },
     setAllLevelDetails(state, payload) {
         state.allLevelDetails = [ ...payload ]
-        console.log(state.allLevelDetails)
      },
    
 }

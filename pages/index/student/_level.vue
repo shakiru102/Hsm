@@ -1,17 +1,35 @@
 <template>
 <div>
  <v-container class="">
-   <Toolbar :toggleDialog="toggleDialog" />
+   <Toolbar :printDiv="printDiv" :toggleDialog="toggleDialog" />
+   <v-data-table
+     :headers=" tableHeader"
+     :items="levelDetails"
+     hide-default-footer
+     id="students"
+     item-class="styling_class"
+      :items-per-page="-1"
+   >
+        <template v-slot:item.actions="props">
+      <v-icon
+        small
+        @click="editItem(props.item)"
+      >
+        mdi-pencil
+      </v-icon>
+    </template>
+   </v-data-table>
   </v-container>
   <v-dialog
     v-model="dialog"
     max-width="500px"
-    transition="dialog-transition"
+    transition="slide-x-transition"
   >
   
      <v-card
     class="px-16"
     :dark="!$store.state.theme"
+    :color="$store.state.theme ? '#F5F5F5' : ''"
   >
   <form ref="studentForm" >
     <v-card-title class="title font-weight-regular justify-space-between">
@@ -51,6 +69,7 @@
                 </v-col>
                     <v-col cols="4">
                  <v-select 
+                  :item-color="!$store.state.theme ? '' :  '#37474F'"
                   :color="!$store.state.theme ? '' :  '#37474F' "
                   :error-messages="err_gender"
                   v-model="gender" :items="select" 
@@ -169,17 +188,88 @@
    >
       <div class="text-center">{{$store.state.snackBarProps.content}}</div> 
    </v-snackbar>
+   <v-bottom-sheet inset v-model="bottomSheet">
+     <v-sheet
+      :dark="!$store.state.theme"
+         :color="$store.state.theme ? '#F5F5F5' : ''"
+      min-height="500px">
+          <v-card flat class="pa-16" v-if="studentData != null" >
+                <v-container class="">
+                   <v-row>
+                     <v-col cols="12" class="text-right">
+                        <v-avatar size="80px"
+                        :color="avatarColor(studentData.payment_status)"
+                        >
+                             <span class=" display-1 white--text font-weight-semibold">{{studentData.name[0]}}</span>
+                           </v-avatar>
+                     </v-col>
+                     <v-col cols="4" >
+                           <v-card-subtitle>
+                         <div class="">Student</div>
+                       </v-card-subtitle>
+                       <v-card-text>
+                         <v-text-field color="#5C6BC0" dense outlined label="Student Name" v-model="studentData.name"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined label="Level" v-model="studentData.level"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined v-model="studentData.student_age" label="Age" ></v-text-field>
+                          <v-select color="#5C6BC0" item-color="#5C6BC0"  v-model="studentData.gender_gender" :items="['Male', 'Female' ]"
+                         label="Gender"></v-select>
+                         <v-text-field color="#5C6BC0" dense outlined label="Student Address" v-model="studentData.address"></v-text-field>
+                       </v-card-text>
+                     </v-col>
+                       <v-col cols="4" >
+                       <v-card-subtitle>
+                         <div class="">Next Of Kin</div>
+                       </v-card-subtitle>
+                       <v-card-text>
+                         <v-text-field color="#5C6BC0" dense outlined label="Full Name" v-model="studentData.kin_name"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined label="Phone Number" v-model="studentData.kin_number"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined label="Address" v-model="studentData.kin_address"></v-text-field>
+                       </v-card-text>
+                        <v-card-subtitle>
+                         <div class="">Starter Pack</div>
+                       </v-card-subtitle>
+                       <v-card-text>
+                          <v-select color="#5C6BC0" item-color="#5C6BC0" v-model="studentData.starter_pack"  :items="['Collected', 'Awaiting' ]"
+                         label="Pack"></v-select>
+                       </v-card-text>
+                     </v-col>
+                     <v-col cols="4" >
+                          <v-card-subtitle>
+                         <div class="">Payment Details</div>
+                       </v-card-subtitle>
+                       <v-card-text>
+                         <v-text-field color="#5C6BC0" dense outlined label="Amount Paid" type="number" :error-messages="err_amount"  v-model="singleStudentAmount"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined label="Expected Amount" type="number" disabled v-model="expected_amount"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined label="Payment Status"  disabled  v-model=" single_payment_status"></v-text-field>
+                             <v-btn block dark class="mb-2" @click="updateStudent" :loading="loading"  text elevation="" color="primary">save</v-btn>
+                             <v-btn block dark class="mb-2" text elevation="" color="#5C6BC0">result</v-btn>
+                             <v-btn block dark class="mb-2" text elevation="" color="error">delete</v-btn>
+                       </v-card-text>
+                     </v-col>
+                     <!-- <v-col cols="12" ></v-col> -->
+                   </v-row>
+                 </v-container>
+          </v-card>
+     </v-sheet>
+   </v-bottom-sheet>
   </div>
 </template>
 
 <script>
 import student from '~/composables/students'
 export default {
-    methods:{
  
-    } ,
    setup(){
      const {
+        updateStudent,
+        singleStudentAmount,
+        single_payment_status,
+       avatarColor,
+       studentData,
+       bottomSheet,
+       editItem,
+       levelDetails,
+        tableHeader,
         handleNext,
       err_amount,
        err_gender,
@@ -205,29 +295,34 @@ export default {
      kin_number,
      amount_paid
       } = student() 
-      const handleAgeChange = (e) => {
-        if(e.target.value < 0) {
-          student_age.value = 1
+   
+     const printDiv = () => {
+            var divContents = document.getElementById("students").innerHTML;
+            var a = window.open('', 'PRINT', 'height=500, width=800');
+            a.document.write('<html>');
+            a.document.write(`<body > <h2>${level.value} </h2>`);
+            a.document.write(divContents);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
         }
-      }
-      
-      const handleAmountChange = (e) => {
-        if(e.target.value > expected_amount.value) {
-          amount_paid.value = expected_amount.value
-        } else if(e.target.value < 0){
-          amount_paid.value = 0
-        }
-      }
-
       return {
+        printDiv,
+         updateStudent,
+        singleStudentAmount,
+        single_payment_status,
+        avatarColor,
+        studentData,
+        bottomSheet,
+         editItem,
+        levelDetails,
+         tableHeader,
          handleNext,
         err_amount,
         err_gender,
        err_name,
        err_age,
         studentsnackbar,
-        handleAmountChange,
-        handleAgeChange,
          saveStudent,
         loading,
         select,
@@ -252,6 +347,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+@media print {
+#students {
+  width: 100vh;
+}
+}
 
 </style>

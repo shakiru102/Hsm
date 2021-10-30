@@ -28,6 +28,18 @@ export default {
   plugins: [
   ],
 
+  ssr: false,
+
+  loadingIndicator: {
+    name: 'cube-grid',
+    color: 'white',
+    background: '#5C6BC0'
+  },
+
+  loading: {
+    color: '#5C6BC0',
+    duration: 10000
+  },
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -60,7 +72,10 @@ export default {
   serverMiddleware:[
     { path: '/api', handler: '~/api/index.js'}
   ],
-
+  //plugins
+  plugins: [
+    {src: '~/plugins/chart.js', mode: 'client'}
+  ],
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

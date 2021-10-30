@@ -4,13 +4,14 @@ const { token, verified } = require("../utils/jwt")
 
 //signup controller
 module.exports.signup = async (req, res) => {
-    const { school_email, school_password, school_phonenum, school_name, school_address,  forgot_email, current_term, payment_verified,  payment_token } = req.body
+    const { school_email, school_password, school_phonenum, school_name, school_address,  forgot_email, current_term, payment_verified,  payment_token, theme } = req.body
+   console.log(req.body)
     try {
         const verifyuser = await hsmUser.findOne({ school_email })
         if(verifyuser) throw Error('Email already exists')
         const salt = await bcrypt.genSalt()
         const password = await  bcrypt.hash(school_password, salt)
-        const user  = await  hsmUser.create({ school_email, school_password: password, school_phonenum, school_name, school_address,  forgot_email, current_term, payment_verified,  payment_token })
+        const user  = await  hsmUser.create({  school_email, school_password: password, school_phonenum, school_name, school_address,  forgot_email, current_term, payment_verified,  payment_token, theme })
 
         if(!user) throw Error('There is a problem creating this school account')
         const jwtToken = await token(user._id)
@@ -60,7 +61,8 @@ module.exports.auth = async (req, res) => {
             phonenumber: user.school_phonenum,
             current_term: user.current_term,
             payment_verified: user.payment_verified,
-            logo: user.logo
+            logo: user.logo,
+            theme: user.theme,
          })
     } catch (error) {
         res.status(400).send(error.message)

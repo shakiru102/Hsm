@@ -15,6 +15,7 @@ const studentSchema = new mongoose.Schema({
     student_photo: String,
     payment_status: String,
     gender: String,
+    starter_pack: String,
     date: { type: String, default: Date.now}
 })
 

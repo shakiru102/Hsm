@@ -1,21 +1,27 @@
 <template>
   <v-toolbar color="transparent" flat>
       <v-toolbar-title>
-        <div :class="$store.state.theme ? ` level`: 'level_dark' ">{{ $route.params.level }}</div>
+        <div :class="$store.state.theme ? ` level`: 'level_dark' ">
+          <slot name="titles">
+          {{ $route.params.level }}
+          </slot>
+          </div>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <slot name="buttons">
           <v-btn @click="toggleDialog" x-small elevation=""  plain color="">
                <v-icon color="">mdi-plus</v-icon>
           </v-btn>
-          <v-btn x-small elevation="" plain color="">
+          <v-btn @click="printDiv" x-small elevation="" plain color="">
                <v-icon color="">mdi-printer-outline</v-icon>
           </v-btn>
+          </slot>
   </v-toolbar>
 </template>
 
 <script>
 export default {
-  props: ['toggleDialog']
+  props: ['toggleDialog', 'printDiv']
 }
 </script>
 

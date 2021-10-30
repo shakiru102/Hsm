@@ -21,34 +21,34 @@
       :rotate="360"
        :size="70"
       :width="3"
-      :value="completed(item.level, 'COMPLETED')"
-      color="success"
+      :value="completed(item.level, 'Completed')"
+      color="#29cc97"
     >
-      {{ completed(item.level, 'COMPLETED') }}%
+      {{ completed(item.level, 'Completed') }}%
     </v-progress-circular>
               </div>
                <div class="uncompleted text text-center">
-                <div class="uncompleted_text warning--text">UNCOMPLETE</div>
+                <div class="uncompleted_text ">UNCOMPLETE</div>
                   <v-progress-circular
       :rotate="360"
       :size="70"
       :width="3"
-      :value="uncompleted(item.level, 'UNCOMPLETE')"
-      color="warning"
+      :value="uncompleted(item.level, 'Uncomplete')"
+      color="#8061ef"
     >
-      {{ uncompleted(item.level, 'UNCOMPLETE') }}%
+      {{ uncompleted(item.level, 'Uncomplete') }}%
     </v-progress-circular>
               </div>
                <div class="void text text-center">
-                <div class="void_text error--text">VIOD</div>
+                <div class="void_text error--text">VOID</div>
                    <v-progress-circular
       :rotate="360"
       :size="70"
       :width="3"
-      :value="Void(item.level, 'VOID')"
+      :value="Void(item.level, 'Void')"
       color="error"
     >
-      {{ Void(item.level, 'VOID') }}%
+      {{ Void(item.level, 'Void') }}%
     </v-progress-circular>
               </div>
             </div>
@@ -75,18 +75,21 @@ export default {
          const newstudents = store.state.allLevelDetails.filter(item => item.level == level && item.payment_status == status)
          const allLevelStudents = store.state.allLevelDetails.filter(item => item.level == level )
          const Total = (newstudents.length / allLevelStudents.length) * 100
+         if(!newstudents.length) return 0
          return Total.toFixed(0)
       }
       const  uncompleted = (level, status) => {
          const newstudents = store.state.allLevelDetails.filter(item => item.level == level && item.payment_status == status)
          const allLevelStudents = store.state.allLevelDetails.filter(item => item.level == level )
          const Total = (newstudents.length / allLevelStudents.length) * 100
+         if(!newstudents.length) return 0
          return Total.toFixed(0)
       }
       const Void = (level, status) => {
          const newstudents = store.state.allLevelDetails.filter(item => item.level == level && item.payment_status == status)
          const allLevelStudents = store.state.allLevelDetails.filter(item => item.level == level )
          const Total = (newstudents.length / allLevelStudents.length) * 100
+         if(!newstudents.length) return 0
          return Total.toFixed(0)
       }
         
@@ -108,7 +111,7 @@ export default {
 <style scoped>
 .panel{
   width: 320px;
-  margin: 0 auto;
+  margin: 0 auto 1.5em auto;
    box-shadow: 0px 10px  24px rgba(192, 188, 185, 0.336);
 
 }
@@ -116,6 +119,8 @@ export default {
   width: 320px;
   margin: 0 auto;
    box-shadow: 0px 10px  24px rgba(0, 0, 0, 0.301);
+  margin: 0 auto 1.5em auto;
+
 }
 .level_stats{
   display: flex;
@@ -161,7 +166,7 @@ export default {
 
 }
 .completed_text{
-  color:#66BB6A;
+  color:#29cc97;
   font-size: 0.6em;
   font-weight: 700;
   margin-bottom: 1em;
@@ -175,6 +180,7 @@ export default {
   font-size: 0.6em;
   font-weight: 700;
   margin-bottom: 1em;
+  color: #8061ef;
 
 
 }

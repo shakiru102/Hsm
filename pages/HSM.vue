@@ -1,5 +1,7 @@
 <template>
-    <v-img height="100vh"  :src="require('@/assets/3.jpg')">
+    <v-img height="100vh"
+    gradient="to left, #5c6bc08c, #5c6bc08c"
+      :src="require('@/assets/3.jpg')">
     <!-- <Feedbacksnackbar  /> -->
       <v-snackbar
        v-model="errsnackBar"

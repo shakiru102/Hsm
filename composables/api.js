@@ -33,6 +33,7 @@ const api = (changeBar) => {
     const errsnackBar = ref(false)
     const payment_token = ref('')
     const payment_verified = ref(false)
+    const theme = ref(true)
     const current_term = ref('')
     const forgot_email = ref('')
   
@@ -51,7 +52,8 @@ const api = (changeBar) => {
                 payment_token:  payment_token.value,
                 payment_verified:  payment_verified.value,
                 current_term:  current_term.value,
-                forgot_email:  forgot_email.value
+                forgot_email:  forgot_email.value,
+                theme:  theme.value,
             }) 
             loading.value = false 
             router.push('/')

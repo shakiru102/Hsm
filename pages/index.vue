@@ -38,7 +38,7 @@
                   <v-col cols="6">
                   <v-row>
                   <v-col cols="12" >
-                   <v-text-field @change="err_termname = '' " v-model="term_name"   :error-messages="err_termname"  :color="!$store.state.theme ? '' :  '#37474F' "  dense required label="Term Name"  ></v-text-field>
+                   <v-text-field @change="err_termname = '' " v-model="term_name"   :error-messages="err_termname" color="#5C6BC0"  dense required label="Term Name"  ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                    <div class="term_options">
@@ -48,7 +48,7 @@
                    <v-col cols="6" >
                          <v-menu offset-y>
                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field @change="err_termfrom = '' "   :error-messages="err_termfrom" v-bind="attrs"  v-on="on"  v-model="from" :color="!$store.state.theme ? '' :  '#37474F' " dense required  label="from"  ></v-text-field>
+                              <v-text-field @change="err_termfrom = '' "   :error-messages="err_termfrom" v-bind="attrs"  v-on="on"  v-model="from" color="#5C6BC0" dense required  label="from"  ></v-text-field>
                            </template>
                              <v-date-picker no-title :dark="!$store.state.theme"  v-model="from"></v-date-picker>
                          </v-menu>
@@ -56,7 +56,7 @@
                   <v-col cols="6" >
                         <v-menu offset-y>
                            <template v-slot:activator="{ on, attrs }">
-                              <v-text-field @change="err_termto = '' "  :error-messages="err_termto" v-bind="attrs"  v-on="on"  v-model="to" :color="!$store.state.theme ? '' :  '#37474F' " dense required  label="to"  ></v-text-field>
+                              <v-text-field @change="err_termto = '' "  :error-messages="err_termto" v-bind="attrs"  v-on="on"  v-model="to" color="#5C6BC0" dense required  label="to"  ></v-text-field>
                            </template>
                              <v-date-picker no-title :dark="!$store.state.theme"  v-model="to"></v-date-picker>
                          </v-menu>
@@ -66,7 +66,7 @@
                    <span class="term_options">
                     Level/Amount
                   </span>
-                      <v-btn   @click="addLevel"  tag="span" small elevation="" icon color="">
+                      <v-btn   @click="addLevel"  tag="span" small elevation="" icon color="#5C6BC0">
                            <v-icon color="">mdi-plus</v-icon>
                          </v-btn>
                     </div>
@@ -75,10 +75,10 @@
                 <v-card-text>
                     <v-layout   row wrap>
                       <v-flex   xs6>
-                      <v-text-field @change="err_termlevel = ''"  :error-messages="err_termlevel"    v-model="level_name"  :color="!$store.state.theme ? '' :  '#37474F' "   class="mr-1"  dense required outlined placeholder="name"  ></v-text-field>
+                      <v-text-field @change="err_termlevel = ''"  :error-messages="err_termlevel"    v-model="level_name"  color="#5C6BC0"   class="mr-1"  dense required outlined placeholder="name"  ></v-text-field>
                       </v-flex>
                       <v-flex  xs6>
-                      <v-text-field @change="err_termamount = ''" type="number"    :error-messages="err_termamount"   v-model="level_amount"   :color="!$store.state.theme ? '' :  '#37474F' "  class="ml-1 inputnum "  dense required outlined placeholder="amount"  ></v-text-field>
+                      <v-text-field @change="err_termamount = ''" type="number"    :error-messages="err_termamount"   v-model="level_amount"  color="#5C6BC0"  class="ml-1 inputnum "  dense required outlined placeholder="amount"  ></v-text-field>
                       </v-flex>
                     </v-layout>
                 </v-card-text>
@@ -108,7 +108,7 @@
               </v-row>
               </v-container>
               <v-card-actions>
-                     <v-btn :loading="disabled"  @click="createterm(changeToggle)" text  elevation="" color="success">Create</v-btn>
+                     <v-btn :loading="disabled"  @click="createterm(changeToggle)" text  elevation="" color="#5C6BC0">Create</v-btn>
                      <v-btn  @click="toggle = !toggle" text  elevation="" color="error">Cancel</v-btn>
               </v-card-actions>
          </v-card>
@@ -131,15 +131,15 @@
               <v-container >
                  <v-row>
                       <v-col cols="12">
-                     <v-text-field :error-messages="event_title_err" :color="!$store.state.theme ? '' :  '#37474F' "  v-model="event_title" dense label="Event Title" ></v-text-field>
+                     <v-text-field :error-messages="event_title_err" color="#5C6BC0"  v-model="event_title" dense label="Event Title" ></v-text-field>
                    </v-col>
                      <v-col cols="12">
-                     <v-textarea :error-messages="event_content_err" :color="!$store.state.theme ? '' :  '#37474F' "  v-model="event_content" auto-grow  rows="3"  label="Event Description" ></v-textarea>
+                     <v-textarea :error-messages="event_content_err" color="#5C6BC0"  v-model="event_content" auto-grow  rows="3"  label="Event Description" ></v-textarea>
                    </v-col>
                     <v-col cols="6">
                           <v-menu offset-y>
                             <template v-slot:activator="{ on, attrs }">
-                              <v-text-field outlined  :error-messages="event_date_err" :color="!$store.state.theme ? '' :  '#37474F' " v-model="event_date" v-bind="attrs" v-on="on" dense label="Event Date" ></v-text-field>
+                              <v-text-field outlined  :error-messages="event_date_err" color="#5C6BC0" v-model="event_date" v-bind="attrs" v-on="on" dense label="Event Date" ></v-text-field>
                             </template>
                               <v-date-picker :dark="!$store.state.theme"   v-model="event_date"></v-date-picker>
                           </v-menu>
@@ -147,7 +147,7 @@
                     <v-col cols="6">
                           <v-menu offset-y>
                             <template v-slot:activator="{ on, attrs }">
-                              <v-text-field outlined  :error-messages="event_color_err" :color="!$store.state.theme ? '' :  '#37474F' " v-model="event_color" v-bind="attrs" v-on="on" dense label="Event Color" >
+                              <v-text-field outlined  :error-messages="event_color_err" color="#5C6BC0" v-model="event_color" v-bind="attrs" v-on="on" dense label="Event Color" >
                                 <template v-slot:append>
                                         <v-icon  :color="event_color">mdi-brush</v-icon>
                                 </template>
@@ -162,7 +162,7 @@
                  </v-row>
                </v-container>
                <v-card-actions>
-                     <v-btn small elevation="" :loading="eventloading"  @click="saveEvent" text color="primary">save</v-btn>
+                     <v-btn small elevation="" :loading="eventloading"  @click="saveEvent" text color="#5C6BC0">save</v-btn>
                      <v-btn small elevation="" text  @click="eventToggle = false" color="error">cancel</v-btn>
                </v-card-actions>
          </v-card>

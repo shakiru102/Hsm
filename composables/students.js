@@ -26,13 +26,14 @@ const student = () => {
    const kin_name = ref('')
    const kin_number = ref('')
    const kin_address = ref('')
+   const starter_pack = ref('Awaiting')
    const student_age = ref(0)
    const dialog = ref(false)
    const studentsnackbar = ref(false)
    const payment_status = computed(() => {
-       if(amount_paid.value <= 0) return 'VOID'
-       if(amount_paid.value > 0 && amount_paid.value < expected_amount.value) return 'UNCOMPLETE'
-       return 'COMPLETED'
+       if(amount_paid.value <= 0) return 'Void'
+       if(amount_paid.value > 0 && amount_paid.value < expected_amount.value) return 'Uncomplete'
+       return 'Completed'
    })
    const currentTitle = computed(() => {
     switch (step.value) {
@@ -76,13 +77,15 @@ const student = () => {
         student_photo: student_photo.value,
         payment_status: payment_status.value,
         gender: gender.value,
+        starter_pack: starter_pack.value,
+
      }
      loading.value = true;
        try {
            const res = await $axios.post('/api/createStudent', data)
            store.commit('setAllLevelDetails', res.data)
            store.commit('setSnackBar', {
-            content: 'Event saved',
+            content: 'Student Created',
             color: 'success' 
             })
            loading.value = false;
@@ -128,7 +131,122 @@ const student = () => {
        }
  }
 
+ const tableHeader = ref([
+  { sortable: false, text: 'Names', value: 'name'},
+   { text: 'Age', value: 'student_age'},
+   { text: 'Gender', value: 'gender'},
+   { text: 'PD (amount)', value: 'amount_paid'},
+   { text: 'EXP (amount)', value: 'expected_amount'},
+   { text: 'PM (status)', value: 'payment_status_abbr'},
+   { text: 'ST (pack)', value: 'starter_pack_abbr'},
+   { text: 'Actions', value: 'actions', sortable: false}
+ ])
+  const levelDetails = computed(() => {
+  const students =  store.state.allLevelDetails.filter( item => item.level == level.value)
+  return students.map(student => {
+    return {
+        school_id: student.school_id,
+        term_id: student.term_id,
+        level: student.level,
+        expected_amount: '₦' + student.expected_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        amount_paid: '₦' + student.amount_paid.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        amount_paid_num: student.amount_paid,
+        name: student.name,
+        address: student.address,
+        kin_name: student.kin_name,
+        kin_number: student.kin_number,
+        kin_address: student.kin_address,
+        student_age: student.student_age,
+        student_photo: student.student_photo,
+        payment_status: student.payment_status,
+        payment_status_abbr: student.payment_status[0],
+        gender: student.gender[0],
+        gender_gender: student.gender,
+        starter_pack: student.starter_pack,
+        starter_pack_abbr: student.starter_pack[0],
+        _id: student._id,
+    }
+  })
+  })
+  const singleStudentAmount = ref(0)
+  const single_payment_status = computed(() => {
+    if(singleStudentAmount.value <= 0) return 'Void'
+    if(singleStudentAmount.value > 0 && singleStudentAmount.value < expected_amount.value) return 'Uncomplete'
+    return 'Completed'
+})
+  const bottomSheet = ref(false)
+  const studentData = ref(null)
+  const  editItem = (data) => {
+          bottomSheet.value = !bottomSheet.value
+          singleStudentAmount.value = data.amount_paid_num
+          studentData.value = data  
+  }
+  const avatarColor = (status) => {
+    if(studentData.value != null){
+      if(status == "Completed") return "success"
+      if(status == "Uncomplete") return "warning"
+      if(status == "Void") return "error"
+    }
+    return ''
+  } 
+  const updateStudent = async () => {
+    if( singleStudentAmount.value > expected_amount.value || singleStudentAmount.value < 0 ) return err_amount.value = 'amount should not excced level amount and should not be less than zero'
+    loading.value = true  
+    const data = {
+        school_id: studentData.value.school_id,
+        term_id: studentData.value.term_id,
+        level: studentData.value.level,
+        expected_amount: studentData.value.expected_amount,
+        amount_paid: singleStudentAmount.value,
+        name: studentData.value.name,
+        address: studentData.value.address,
+        kin_name: studentData.value.kin_name,
+        kin_number: studentData.value.kin_number,
+        kin_address: studentData.value.kin_address,
+        student_age: studentData.value.student_age,
+        student_photo: studentData.value.student_photo,
+        payment_status: single_payment_status.value,
+        gender: studentData.value.gender_gender,
+        starter_pack: studentData.value.starter_pack,
+        _id: studentData.value._id,
+      }
+      try {
+        const res = await $axios.post('/api/updateStudent', data)
+        store.commit('setAllLevelDetails', res.data)
+        store.commit('setSnackBar', {
+         content: 'Student Created',
+         color: 'success' 
+         })
+         err_amount.value = ''
+        console.log(res.data)
+        loading.value = false  
+         bottomSheet.value = !bottomSheet.value
+         studentsnackbar.value = true
+
+      } catch (error) {
+        console.error(error.response.data)
+        store.commit('setSnackBar', {
+         content: error.response.data,
+         color: 'error' 
+         })
+         studentsnackbar.value = true
+          loading.value = false  
+
+        
+      }
+  }
+
+
  return {
+  updateStudent,
+  singleStudentAmount,
+  single_payment_status,
+  avatarColor,
+  studentData,
+   bottomSheet,
+  editItem,
+  levelDetails,
+   tableHeader,
      handleNext,
      err_amount,
         err_gender,

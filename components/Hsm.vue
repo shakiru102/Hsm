@@ -2,8 +2,8 @@
   <nav>
        <v-app-bar height="80px"  color="transparent" flat  dense dark>
             <v-spacer></v-spacer>
-            <v-btn fab class="mr-3 mt-5"   @click="hiddenNav = !hiddenNav"  >
-              <v-icon color="rgba(240, 126, 50, 0.918)"  >mdi-login-variant</v-icon>
+            <v-btn fab class="mr-3 mt-5" light  @click="hiddenNav = !hiddenNav"  >
+              <v-icon color="#5C6BC0"  >mdi-login-variant</v-icon>
             </v-btn>
           </v-app-bar>
           <v-navigation-drawer
