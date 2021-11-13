@@ -44,7 +44,7 @@
               <v-row>
                 <v-col cols="12">
                   <v-text-field
-                   :color="!$store.state.theme ? '' :  '#37474F' "
+                   :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   label="Student Name"
                   v-model="name"
                   :error-messages="err_name"
@@ -52,7 +52,7 @@
                 </v-col>
                     <v-col cols="4">
                   <v-text-field
-                   :color="!$store.state.theme ? '' :  '#37474F' "
+                   :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   label="Student Level"
                   v-model="level"
                   disabled
@@ -61,7 +61,7 @@
                    <v-col cols="4">
                   <v-text-field
                   label="Age"
-                   :color="!$store.state.theme ? '' :  '#37474F' "
+                   :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   :error-messages="err_age"
                   v-model="student_age"
                   type="number"
@@ -69,8 +69,8 @@
                 </v-col>
                     <v-col cols="4">
                  <v-select 
-                  :item-color="!$store.state.theme ? '' :  '#37474F'"
-                  :color="!$store.state.theme ? '' :  '#37474F' "
+                  :item-color="!$store.state.theme ? '#5C6BC0' :  '#37474F'"
+                  :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   :error-messages="err_gender"
                   v-model="gender" :items="select" 
                  label="Gender"></v-select>
@@ -87,7 +87,7 @@
               <v-row>
                 <v-col cols="12">
                   <v-text-field
-                   :color="!$store.state.theme ? '' :  '#37474F' "
+                   :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   label="Amount Paid"
                   v-model="amount_paid"
                   :error-messages="err_amount"
@@ -96,7 +96,7 @@
                 </v-col>
                     <v-col cols="6">
                   <v-text-field
-                   :color="!$store.state.theme ? '' :  '#37474F' "
+                   :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   label="Level Amount"
                   v-model="expected_amount"
                   disabled
@@ -104,7 +104,7 @@
                 </v-col>
                     <v-col cols="6">
                    <v-text-field
-                  :color="!$store.state.theme ? '' :  '#37474F' "
+                  :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   label="Payment Status"
                   v-model="payment_status"
                   disabled
@@ -122,21 +122,21 @@
                 <div class="subtitle">Next Of Kin</div>
                 <v-col cols="12">
                   <v-text-field
-                  :color="!$store.state.theme ? '' :  '#37474F' "
+                  :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   label="Name"
                   v-model="kin_name"
                   ></v-text-field>
                 </v-col>
                     <v-col cols="6">
                   <v-text-field
-                   :color="!$store.state.theme ? '' :  '#37474F' "
+                   :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   label="Phone Number"
                   v-model="kin_number"
                   ></v-text-field>
                 </v-col>
                     <v-col cols="6">
                    <v-text-field
-                    :color="!$store.state.theme ? '' :  '#37474F' "
+                    :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                   label="Address"
                   v-model="kin_address"
                   ></v-text-field>

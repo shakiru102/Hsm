@@ -1,7 +1,7 @@
 <template>
 <!-- <div></div> -->
   <v-card class="content_div" :color="$store.state.theme ? '#F5F5F5' : ''"  tile flat :dark="!$store.state.theme">
-      <Head  :addEvent="addEvent" :snackbar="snackbar" :changeToggle="changeToggle" />
+      <Head :changeProfile="changeProfile"  :addEvent="addEvent" :snackbar="snackbar" :changeToggle="changeToggle" />
          <v-snackbar
        v-model="snackbar"
        :color="$store.state.snackBarProps.color"
@@ -114,7 +114,21 @@
          </v-card>
        </v-dialog>
        <!-- routes children  -->
-      <nuxt-child />
+         <v-window v-model="profile" reverse>
+           <v-window-item :value="1">
+                <nuxt-child />
+           </v-window-item>
+             <v-window-item :value="2">
+                <v-container class="">
+                   <v-row
+               >
+                 <v-btn @click="profile--" x-large icon>
+                        <v-icon >mdi-arrow-left-circle-outline</v-icon>
+                      </v-btn>
+               </v-row>
+                 </v-container>
+             </v-window-item>
+           </v-window>
       <!-- dialog fron events  -->
  <v-dialog
          v-model="eventToggle"
@@ -141,7 +155,7 @@
                             <template v-slot:activator="{ on, attrs }">
                               <v-text-field outlined  :error-messages="event_date_err" color="#5C6BC0" v-model="event_date" v-bind="attrs" v-on="on" dense label="Event Date" ></v-text-field>
                             </template>
-                              <v-date-picker :dark="!$store.state.theme"   v-model="event_date"></v-date-picker>
+                              <v-date-picker :dark="!$store.state.theme" no-title   v-model="event_date"></v-date-picker>
                           </v-menu>
                    </v-col>
                     <v-col cols="6">
@@ -176,7 +190,7 @@ import utils from '@/composables/utility'
 import term from '@/composables/storeterm'
 import Eventapi from '@/composables/eventapi'
 import { useContext } from '@nuxtjs/composition-api'
-// import { ref, computed, watch } from "@vue/composition-api"
+import { ref } from "@vue/composition-api"
 // import moment from 'moment'
 export default {
   middleware: ["auth", "event"],
@@ -229,9 +243,12 @@ export default {
        }
      }
      const changeToggle = () => toggle.value = !toggle.value
-     
+     const profile = ref(1)     
+     const changeProfile = () => profile.value++
 
 return { 
+        changeProfile,
+          profile,
           eventsnackbar,
           deleteLevel, 
           disabled,
@@ -271,7 +288,7 @@ return {
 
 <style scoped>
 .content_div.v-card {
-  height: 87vh;
+  height: 100vh;
   overflow-y: scroll;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none; 

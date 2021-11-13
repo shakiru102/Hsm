@@ -76,7 +76,57 @@
       <span>Events</span>
     </v-tooltip>
           <v-spacer></v-spacer>
-              <v-btn text>logo</v-btn>
+                  <v-menu offset-y  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-badge
+                      class="mr-8"
+                        avatar
+                        bottom
+                        overlap
+                       color="transparent"
+                      >
+                        <template v-slot:badge>
+                           <v-btn 
+                             v-bind="attrs"
+                              v-on="on"
+                              icon
+                              x-small
+                              color="grey"
+                           >
+                                <v-icon color="">mdi-cog</v-icon>
+                                </v-btn>
+                        </template>
+
+                        <v-avatar   size="40">
+                          <div class="title">{{ $store.state.hsm.name[0] }}</div>
+                        </v-avatar>
+                      </v-badge>
+                    </template>
+                    <v-list 
+                    :dark="!$store.state.theme"
+                    >
+                       <v-list-item
+                    dense
+                    >
+                    <v-list-item-subtitle>{{  $store.state.hsm.email }}</v-list-item-subtitle>
+                    </v-list-item>
+                    <v-list-item
+                    dense
+                    tag="button"
+                    @click="changeProfile"
+                    >
+                      <v-list-item-subtitle>PROFILE</v-list-item-subtitle>
+                    </v-list-item>
+                      <v-list-item
+                       tag="button"
+                       dense
+                      >
+                        <v-list-item-subtitle class="error--text">SIGN OUT</v-list-item-subtitle>
+                        <v-list-item-icon> <v-icon color="error">mdi-power</v-icon>
+                        </v-list-item-icon>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
         </v-app-bar> 
         <v-navigation-drawer
         right
@@ -116,7 +166,7 @@ import { computed } from '@vue/composition-api'
 import { useContext } from '@nuxtjs/composition-api'
 export default {
   
-  props: ['changeToggle', 'addEvent'],
+  props: ['changeToggle', 'addEvent', 'changeProfile'],
     setup() {
         const { nav, rightBar,  changeTheme, menu, date } = utils()
         const { store } = useContext()

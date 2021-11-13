@@ -54,9 +54,9 @@ module.exports.saveStudent = async (req, res) => {
 
 module.exports.getstudents = async (req, res) => {
    
-   const {school_id, term_id } = req.query
+   const { school_id } = req.query
    try {
-        const Students = await student.find({school_id, term_id}).sort({name: 1})
+        const Students = await student.find({ school_id }).sort({name: 1})
         res.status(200).json(Students)
    } catch (error) {
       res.status(400).send('Could not get students')
@@ -102,7 +102,7 @@ module.exports.updatestudent = async (req, res) => {
          starter_pack,
         })
         if(!updateStudent) throw new Error('Student data not updated')
-        const Students = await student.find({school_id, term_id}).sort({name: 1})
+        const Students = await student.find({ school_id }).sort({name: 1})
          res.status(200).json(Students)
 
      } catch (error) {
