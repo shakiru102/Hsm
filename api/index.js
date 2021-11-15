@@ -4,6 +4,7 @@ const hsmUser = require("./routes/hsmUser")
 const termroutes = require("./routes/termroutes")
 const eventroutes = require("./routes/eventroutes")
 const studentroutes = require("./routes/studentroutes")
+const staffroutes = require("./routes/staffroute")
 const app = express(); 
 env.config()
 mongoose.connect(process.env.MONGODB_URL, {
@@ -19,6 +20,7 @@ app.use( hsmUser )
 app.use( termroutes )
 app.use(eventroutes)
 app.use(studentroutes)
+app.use(staffroutes)
 
 
 module.exports = app

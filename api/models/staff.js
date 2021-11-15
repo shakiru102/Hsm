@@ -7,8 +7,12 @@ const staffSchema = new mongoose.Schema({
     address: String,
     staff_number: String,
     staff_category: String,
+    staff_certificate: String,
     staff_task: String,
     staff_photo: String,
+    gender: String,
+    referAs: String,
+    dob: String,
     date: { type: String, default: Date.now }
 })
 

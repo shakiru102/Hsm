@@ -8,7 +8,8 @@ export const state = () => ({
     },
     currentTerm: null,
     events: [],
-    allLevelDetails: []
+    allLevelDetails: [],
+    staffs: [],
 
 })
 
@@ -47,5 +48,8 @@ export const mutations = {
     setAllLevelDetails(state, payload) {
         state.allLevelDetails = [ ...payload ]
      },
+     Staffs(state, payload) {
+         state.staffs = [ ...payload ]
+     }
    
 }

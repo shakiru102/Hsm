@@ -33,16 +33,42 @@
           <v-window v-model="rooms">
              <v-window-item :value="1">
                <v-card-text>
-                <v-text-field 
-                v-model="lastname"
-                :error-messages="err_lastname"
-                :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
-                label="Last Name"></v-text-field>
-                 <v-text-field 
-                v-model="firstname"
-                :error-messages="err_firstname"
-                :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
-                label="First Name"></v-text-field>
+                  <v-container class="">
+                     <v-row>
+                       <v-col cols="6">
+                            <v-text-field 
+                              v-model="lastname"
+                              :error-messages="err_lastname"
+                              :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
+                              label="Last Name"></v-text-field>
+                       </v-col>
+                       <v-col cols="6">
+                        <v-text-field 
+                          v-model="firstname"
+                          :error-messages="err_firstname"
+                          :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
+                          label="First Name"></v-text-field>
+                       </v-col>
+                       <v-col cols="6">
+                          <v-select 
+                          v-model="gender"
+                          :error-messages="err_gender"
+                          :item-color="!$store.state.theme ? '#5C6BC0' :  '#37474F'"
+                          :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
+                          :items="['Male', 'Female']"
+                          label="Staff Gender"></v-select>
+                       </v-col>
+                        <v-col cols="6">
+                           <v-text-field 
+                          v-model="referAs"
+                          disabled
+                          :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
+                          label="Refer as"></v-text-field>
+                       </v-col>
+                     </v-row>
+                   </v-container>
+             
+                 
                </v-card-text>
              </v-window-item>
              <v-window-item :value="2">
@@ -58,30 +84,55 @@
                       </v-col>
                       <v-col cols="6">
                         <v-select 
-                         v-model="category"
+                          v-model="category"
+                          :error-messages="err_category"
                           :item-color="!$store.state.theme ? '#5C6BC0' :  '#37474F'"
                           :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
                           :items="['Adminstration', 'Teaching', 'Non-Teaching']"
-                        label="Staff Category"></v-select>
+                          label="Staff Category"></v-select>
                       </v-col>
                          <v-text-field 
                          v-model="task" 
-                      :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' " 
-                    label="Staff Task"></v-text-field>
+                         :error-messages="err_task"
+                         :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' " 
+                        label="Staff Task"></v-text-field>
                     </v-row>
                   </v-container>
                </v-card-text>
              </v-window-item>
              <v-window-item :value="3">
                <v-card-text>
-                 <v-text-field 
-                 v-model="address"
-                 :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
-                 label="Staff Address"></v-text-field>
-                <v-text-field 
-                v-model="number"
-                :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
-                label="Staff Number"></v-text-field>
+                  <v-container class="">
+                     <v-row>
+                       <v-col cols="12">
+                        <v-text-field 
+                        v-model="address"
+                        :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
+                        label="Staff Address"></v-text-field>
+                       </v-col>
+                       <v-col cols="6">
+                            <v-text-field 
+                            v-model="number"
+                            :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
+                            label="Staff Number"></v-text-field>
+                       </v-col>
+                       <v-col cols="6">
+                             <v-menu offset-y>
+                               <template v-slot:activator="{ on, attrs }">
+                                 <v-text-field 
+                                  :color="!$store.state.theme ? '#5C6BC0' :  '#37474F' "
+                                   label="DOB"
+                                   v-model="dob"
+                                   v-bind="attrs"
+                                   v-on="on"
+                                 >
+                                 </v-text-field >
+                               </template>
+                                  <v-date-picker v-model="dob"></v-date-picker>
+                             </v-menu>
+                       </v-col>
+                     </v-row>
+                   </v-container>
                </v-card-text>
              </v-window-item>
           </v-window>
@@ -100,12 +151,14 @@
         depressed
         dark
         text
-        @click="rooms++"
+        @click="handleNext"
       >
         Next
       </v-btn>
         <v-btn
        v-else
+       :loading="loading"
+       @click="savestaff"
         color="#5C6BC0"
         depressed
         dark
@@ -115,6 +168,14 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
+        <v-snackbar
+       v-model="snackbar"
+       :color="$store.state.snackBarProps.color"
+       bottom
+       timeout="3000"
+   >
+      <div class="text-center">{{$store.state.snackBarProps.content}}</div> 
+   </v-snackbar>
   </v-container>
 </template>
 
@@ -122,10 +183,19 @@
 import staff from '~/composables/staffcomposable'
 export default {
   setup(){
-    const { tableTitle,
-            dialog,
-            rooms,
-          lastname,
+    const { 
+      dob,
+      gender,
+      err_gender,
+      referAs,
+        handleNext,
+        savestaff,
+        loading,
+        snackbar,
+        tableTitle,
+        dialog,
+        rooms,
+        lastname,
         err_lastname,
         firstname,
         err_firstname,
@@ -141,6 +211,14 @@ export default {
             } = staff()
 
     return{ 
+      dob,
+      gender,
+      err_gender,
+      referAs,
+      handleNext,
+      savestaff,
+      loading,
+      snackbar,
       tableTitle,
       dialog,
       rooms,

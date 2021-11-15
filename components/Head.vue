@@ -113,6 +113,7 @@
                     <v-list-item
                     dense
                     tag="button"
+                    
                     @click="changeProfile"
                     >
                       <v-list-item-subtitle>PROFILE</v-list-item-subtitle>
