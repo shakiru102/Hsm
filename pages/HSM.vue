@@ -22,6 +22,7 @@
 <script>
 import api from '~/composables/api'
 export default {
+  middleware: 'signedIn',
      setup(){
        const { errsnackBar } =  api()
        const changeBar = () => errsnackBar.value = !errsnackBar.value

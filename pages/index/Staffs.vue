@@ -13,8 +13,16 @@
     <v-data-table
       :headers="tableTitle"
       hide-default-footer
+      :items="staffDetails"
     >
-      
+     <template v-slot:item.actions="props">
+      <v-icon
+        small
+        @click="editItem(props.item)"
+      >
+        mdi-pencil
+      </v-icon>
+    </template> 
     </v-data-table>
     <v-dialog
       v-model="dialog"
@@ -176,6 +184,53 @@
    >
       <div class="text-center">{{$store.state.snackBarProps.content}}</div> 
    </v-snackbar>
+   <v-bottom-sheet inset v-model="bottomSheet">
+     <v-sheet
+      :dark="!$store.state.theme"
+         :color="$store.state.theme ? '#F5F5F5' : ''"
+      min-height="500px">
+          <v-card flat class="pa-16" v-if="staffData != null" >
+                <v-container class="">
+                   <v-row>
+                     
+                     <v-col cols="6" >
+                           <v-card-subtitle>
+                         <div class="">Staff</div>
+                       </v-card-subtitle>
+                       <v-card-text>
+                         <v-text-field color="#5C6BC0" dense outlined label="Last Name" v-model="staffData.last_name"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined label="First Name" v-model="staffData.first_name"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined label="Gender" v-model="staffData.gender"></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined v-model="staffData.referAs" label="Refer" ></v-text-field>
+                         <v-text-field color="#5C6BC0" dense outlined label="Mode of Employment" v-model="staffData.staff_certificate"></v-text-field> 
+                         <v-text-field color="#5C6BC0"  label="Address" v-model="staffData.address"></v-text-field>
+                       
+                       </v-card-text>
+                     </v-col>
+                      
+                     <v-col cols="6" class="text-center">
+                        <v-avatar size="120px"
+                        color="primary"
+                        >
+                             <span class=" display-2 white--text font-weight-semibold">{{ staffData.last_name ? staffData.last_name[0].toUpperCase() : ''}}</span>
+                           </v-avatar>
+                           
+                           <v-card-subtitle>
+                         <div class="">Staff Task</div>
+                       </v-card-subtitle>
+                       <v-card-text>
+                         <v-text-field color="#5C6BC0"  label="Category" v-model="staffData.staff_category"></v-text-field>
+                         <v-text-field color="#5C6BC0"  label="Task" v-model="staffData.staff_task"></v-text-field>
+                         <v-text-field color="#5C6BC0"  label="Phone Number" v-model="staffData.staff_number"></v-text-field>
+                         <v-btn :loading="loading" @click="handleEditStaff" block color="#5C6BC0" dark>save changes</v-btn>
+                         <!-- <v-text-field color="#5C6BC0" dense outlined label="Staff Address" v-model="staffData.address"></v-text-field>  -->
+                       </v-card-text>
+                     </v-col>
+                   </v-row>
+                 </v-container>
+          </v-card>
+     </v-sheet>
+   </v-bottom-sheet>
   </v-container>
 </template>
 
@@ -184,10 +239,15 @@ import staff from '~/composables/staffcomposable'
 export default {
   setup(){
     const { 
-      dob,
-      gender,
-      err_gender,
-      referAs,
+        handleEditStaff,
+        bottomSheet,
+        staffData,
+        editItem,
+        staffDetails,
+        dob,
+        gender,
+        err_gender,
+        referAs,
         handleNext,
         savestaff,
         loading,
@@ -210,7 +270,12 @@ export default {
         currentTitle
             } = staff()
 
-    return{ 
+    return{
+      handleEditStaff,
+       bottomSheet,
+        staffData,
+        editItem,
+      staffDetails,
       dob,
       gender,
       err_gender,

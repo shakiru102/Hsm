@@ -68,3 +68,8 @@ module.exports.auth = async (req, res) => {
         res.status(400).send(error.message)
     }
 }
+
+module.exports.signout = async (req, res) => {
+     res.cookie('HSM', '', { maxAge: 1000, httpOnly: true })
+     res.send('Signout successfully')
+}

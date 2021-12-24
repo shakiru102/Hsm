@@ -1,7 +1,7 @@
 <template>
 <!-- <div></div> -->
   <v-card class="content_div" :color="$store.state.theme ? '#F5F5F5' : ''"  tile flat :dark="!$store.state.theme">
-      <Head :changeProfile="changeProfile"  :addEvent="addEvent" :snackbar="snackbar" :changeToggle="changeToggle" />
+      <Head :toggleEventDialog="toggleEventDialog" :changeProfile="changeProfile"  :addEvent="addEvent" :snackbar="snackbar" :changeToggle="changeToggle" />
          <v-snackbar
        v-model="snackbar"
        :color="$store.state.snackBarProps.color"
@@ -20,6 +20,7 @@
    >
       <div class="text-center">{{$store.state.snackBarProps.content}}</div> 
    </v-snackbar>
+
    <!-- dialog for creating term  -->
        <v-dialog
          v-model="toggle"
@@ -113,6 +114,36 @@
               </v-card-actions>
          </v-card>
        </v-dialog>
+
+       <!-- List of Events dialog  -->
+        <v-dialog
+          v-model="eventDialog"
+          max-width="1000px"
+          transition="dialog-transition"
+        >
+          <v-card class="list_card_cont"  :dark="!$store.state.theme">
+            <v-card-title>
+              <div :class=" $store.state.theme ? 'school_events' : 'school_events_dark'">Current Term Events</div>
+            </v-card-title>
+            <div class="list_of_events">
+            <v-expansion-panels flat v-if="formatted.length" >
+               <v-expansion-panel  :style="`border-left: solid 2.5px ${item.event_color}; margin-top: 0.1em;  `" class="events" v-for="(item, index) in formatted" :key="index">
+                 <v-expansion-panel-header>
+                   <div>
+                      <div :class="!$store.state.theme ? 'head_dark' : 'head'">{{ item.event_date }}</div>
+                    <div :class=" !$store.state.theme ?  'content_dark text-uppercase' : 'content text-uppercase' ">{{ item.event_title }}</div>
+                   </div>
+                 </v-expansion-panel-header>
+                 <v-expansion-panel-content>
+                   <div :class=" !$store.state.theme ?  'subContent_dark' :'subContent' ">{{ item.event_content }}</div>
+                 </v-expansion-panel-content>
+               </v-expansion-panel>
+              </v-expansion-panels>
+              <div v-else class="text-center"> There are no events yet. </div>
+              </div>
+          </v-card>
+        </v-dialog>
+
        <!-- routes children  -->
          <v-window v-model="profile" reverse>
            <v-window-item :value="1">
@@ -190,10 +221,10 @@ import utils from '@/composables/utility'
 import term from '@/composables/storeterm'
 import Eventapi from '@/composables/eventapi'
 import { useContext } from '@nuxtjs/composition-api'
-import { ref } from "@vue/composition-api"
-// import moment from 'moment'
+import { ref, computed } from "@vue/composition-api"
+import moment from 'moment'
 export default {
-  middleware: ["auth", "event"],
+  middleware: ["auth", "staff" ,  "event"],
   
   setup(){
      
@@ -245,8 +276,22 @@ export default {
      const changeToggle = () => toggle.value = !toggle.value
      const profile = ref(1)     
      const changeProfile = () => profile.value++
+     const formatted = computed(() =>store.state.events.map( item => {
+           return {
+            event_date:  moment(item.event_date).format('dddd, MMMM Do YYYY'),
+            event_title: item.event_title,
+            event_content: item.event_content,
+            event_color: item.event_color,
+            _id: item._id,
+           }
+         }))
+         const eventDialog = ref(false)
+         const toggleEventDialog = () => eventDialog.value = !eventDialog.value
 
 return { 
+      toggleEventDialog,
+       eventDialog,
+        formatted,
         changeProfile,
           profile,
           eventsnackbar,
@@ -328,5 +373,72 @@ return {
 .v-icon.book_icon{
   font-size: 15em;
 }
+.content{
+   font-size: 0.7em;
+  font-weight: 500;
+  margin-top: 0.5em; 
+ color: grey;
+ 
+}
+.content_dark{
+   font-size: 0.7em;
+  font-weight: 500;
+  margin-top: 0.5em; 
+color: rgb(201, 197, 197);
+ 
+}
+ .head{
+ font-family: Montserrat, sans-serif; 
+ font-size: 0.8em;
+ font-weight: 500;
+ color: grey;
+}
+ .head_dark{
+ font-family: Montserrat, sans-serif; 
+ font-size: 0.8em;
+ font-weight: 500;
+ color: rgb(201, 197, 197);
+}
+.subContent{
+   font-size: 0.7em;
+  /* font-weight: 500; */
+  margin-top: 0.5em; 
+ color: grey;
+ 
+}
+.subContent_dark{
+   font-size: 0.7em;
+  /* font-weight: 500; */
+  margin-top: 0.5em; 
+color: rgb(201, 197, 197);
+ 
+}
+.list_card_cont.v-card{
+ height: 500px;
+ overflow: hidden;
 
+}
+.list_of_events{
+ height: 100%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none; 
+}
+.list_of_events::-webkit-scrollbar{
+  width: 5px;
+}
+.list_of_events::-webkit-scrollbar-thumb{
+  width: 5px;
+  background: #5C6BC0;
+  border-radius: 3px;
+}
+.school_events{
+    font-family: Montserrat, sans-serif;
+  font-weight: bold;
+}
+.school_events_dark{
+    font-family: Montserrat, sans-serif;
+  font-weight: bold;
+  color: rgb(201, 197, 197);
+}
 </style>

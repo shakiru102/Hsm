@@ -17,7 +17,7 @@
                </template>
              <span>{{ nav.name }}</span>
            </v-tooltip>
-               <v-btn absolute bottom block plain  class="error--text logout_btn">
+               <v-btn @click="handleSignout" absolute bottom block plain  class="error--text logout_btn">
                   <v-icon color="">mdi-logout-variant</v-icon>
                </v-btn>
            
@@ -65,6 +65,7 @@
           </template>
                   <v-btn
                       large
+                      @click="toggleEventDialog"
                       v-bind="attrs"
                       v-on="on"
                       plain icon>
@@ -121,6 +122,7 @@
                       <v-list-item
                        tag="button"
                        dense
+                       @click="handleSignout"
                       >
                         <v-list-item-subtitle class="error--text">SIGN OUT</v-list-item-subtitle>
                         <v-list-item-icon> <v-icon color="error">mdi-power</v-icon>
@@ -167,9 +169,9 @@ import { computed } from '@vue/composition-api'
 import { useContext } from '@nuxtjs/composition-api'
 export default {
   
-  props: ['changeToggle', 'addEvent', 'changeProfile'],
+  props: ['changeToggle', 'addEvent', 'changeProfile', 'toggleEventDialog'],
     setup() {
-        const { nav, rightBar,  changeTheme, menu, date } = utils()
+        const { nav, rightBar,  changeTheme, menu, date, handleSignout } = utils()
         const { store } = useContext()
          const filtered = computed(() =>store.state.events.filter(item => item.event_date >= date.value).map( item => {
            return {
@@ -182,7 +184,7 @@ export default {
          }))
      
         return {
-            nav, rightBar,  changeTheme, menu, filtered, 
+            nav, rightBar,  changeTheme, menu, filtered, handleSignout
         }
     }
 }

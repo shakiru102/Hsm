@@ -9,8 +9,42 @@ const roomTeacher = () => {
         {text: "Name", value: "name"},
         {text: "Gender", value: "gender_gender"},
         {text: "Category", value: "staff_category"},
-        {text: "Task", value: "staff_task"}
+        {text: "Task", value: "staff_task"},
+        {text: "Actions", value: "actions"}
     ]
+
+    const bottomSheet = ref(false)
+    const staffData = ref(null)
+    const  editItem = (data) => {
+            bottomSheet.value = !bottomSheet.value
+            staffData.value = data  
+    }
+    const handleEditStaff = async () => {
+       if(staffData.value != null) {
+           loading.value = true 
+           const { school_id, first_name, last_name, address, staff_number, staff_category, staff_task, staff_certificate, gender, referAs, dob, _id } = staffData.value
+           try {
+               const res = await $axios.post('/api/editstaff', { school_id, first_name, last_name, address, staff_number, staff_category, staff_task, staff_certificate, gender, referAs, dob, _id })
+               store.commit('Staffs', res.data)
+                store.commit('setSnackBar', {
+                content: 'Staff details has been updated',
+                color: 'success' 
+                })
+               loading.value = false
+               bottomSheet.value = !bottomSheet.value
+               snackbar.value = true
+           } catch (error) {
+            store.commit('setSnackBar', {
+                content: 'Could not update staff details',
+                color: 'error' 
+                })
+            loading.value = false
+            snackbar.value = true
+
+               
+           }
+       }
+    }
 
     const staffDetails = computed(() => {
        const staffs = store.state.staffs.map( staff => {
@@ -141,6 +175,10 @@ const roomTeacher = () => {
 
 
     return {
+        handleEditStaff,
+        bottomSheet,
+        staffData,
+        editItem,
         staffDetails,
         gender,
         err_gender,
