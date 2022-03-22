@@ -15,7 +15,7 @@ const student = () => {
    const fcs = ref(20)
    const scs = ref(20)
    const es = ref(60)
-   const student_fcs = ref(1)
+   const student_fcs = ref(0)
    const student_scs = ref(0)
    const student_es = ref(0)
    const studentResults = ref([])
