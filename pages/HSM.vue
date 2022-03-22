@@ -19,7 +19,7 @@
                 </div>
                 <div class="hsmcontent">High School Manager is an education based website application built for secondary schools that provides a cumulative database for school records and eases their administrative burdens.
                 </div>
-                <v-btn x-large class="mt-16 btn" dark style="border-radius: 18px" width="319px" @click="hiddenNav = !hiddenNav" color="#E82F2F">get started</v-btn>
+                <v-btn x-large class="mt-16 btn" dark style="border-radius: 18px" width="319px"  color="#E82F2F">get started</v-btn>
               </div> 
         </v-container>
         <Footer />

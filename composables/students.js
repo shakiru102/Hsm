@@ -195,8 +195,9 @@ const student = () => {
   const bottomSheet = ref(false)
   const studentData = ref(null)
   const  editItem = (data) => {
-    singleStudentAmount.value = data.amount_paid_num
+          debugger
           studentData.value = data  
+          singleStudentAmount.value = data.amount_paid_num
           result.value = 1
           bottomSheet.value = !bottomSheet.value
           
