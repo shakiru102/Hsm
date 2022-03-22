@@ -31,7 +31,7 @@ const student = () => {
         expected_amount.value = result.amount
        console.log(expected_amount)
 
-       studentResults.value = JSON.parse(localStorage.getItem('results'))
+       studentResults.value = JSON.parse(localStorage.getItem('results')) || []
    })
     const  err_amount = ref('')
     const  err_gender = ref('')
@@ -195,12 +195,10 @@ const student = () => {
   const bottomSheet = ref(false)
   const studentData = ref(null)
   const  editItem = (data) => {
-          debugger
-          studentData.value = data  
-          singleStudentAmount.value = data.amount_paid_num
-          result.value = 1
           bottomSheet.value = !bottomSheet.value
-          
+          singleStudentAmount.value = data.amount_paid_num
+          studentData.value = data  
+          result.value = 1
   }
   const avatarColor = (status) => {
     if(studentData.value != null){
