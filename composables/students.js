@@ -195,10 +195,11 @@ const student = () => {
   const bottomSheet = ref(false)
   const studentData = ref(null)
   const  editItem = (data) => {
-          bottomSheet.value = !bottomSheet.value
-          singleStudentAmount.value = data.amount_paid_num
+    singleStudentAmount.value = data.amount_paid_num
           studentData.value = data  
           result.value = 1
+          bottomSheet.value = !bottomSheet.value
+          
   }
   const avatarColor = (status) => {
     if(studentData.value != null){
