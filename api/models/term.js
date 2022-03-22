@@ -6,7 +6,7 @@ const termSchema = new mongoose.Schema({
     to: String,
     students_level: [{ level: String, amount: Number}],
     term_name: String,
-    date: { type: String, default: Date.now}
+    date: { type: String, default: Date.now }
 })
 
 const term = mongoose.model('term', termSchema)

@@ -193,16 +193,54 @@
       :dark="!$store.state.theme"
          :color="$store.state.theme ? '#F5F5F5' : ''"
       min-height="500px">
-          <v-card flat class="pa-16" v-if="studentData != null" >
+          
+          <v-card flat color="transparent" class="pa-16" v-if="studentData != null" >
+            <div :class="result != 1 ? 'd-flex justify-space-between' : 'text-right'">
+              <v-btn v-if="result != 1" @click="result = 1" x-large icon>
+                <v-icon >mdi-arrow-left-circle-outline</v-icon>
+              </v-btn>
+              <v-avatar size="80px"
+                :color="avatarColor(studentData.payment_status)"
+                >
+                <span class=" display-1 white--text font-weight-semibold">{{studentData.name[0]}}</span>
+              </v-avatar>
+            </div>
+            <v-window v-model="result">
+               <v-window-item :value="2"> 
+                  <v-container>
+                     <v-row>
+                       <v-col cols="4">
+                         <v-card-text>
+                           <v-text-field disabled label="Term" v-model="$store.state.currentTerm.term_name" ></v-text-field>
+                           <v-text-field disabled label="Total First CA Score" v-model="fcs" ></v-text-field>
+                           <v-text-field disabled label="Total Second CA Score" v-model="scs" ></v-text-field>
+                           <v-text-field disabled label="Total Exam Score" v-model="es" ></v-text-field>
+                           <v-text-field disabled label="Total Score" :value="totalScore + '/100'" ></v-text-field>
+                         </v-card-text>
+                       </v-col>
+                        <v-col cols="5">
+                         <v-card-text>
+                           <v-text-field color="#5C6BC0" dense v-model="subjectTitle" outlined label="Subject Title"></v-text-field>
+                           <v-text-field color="#5C6BC0" v-model="student_fcs" dense type="number" outlined label="First CA Score"></v-text-field>
+                           <v-text-field color="#5C6BC0" v-model="student_scs" dense type="number" outlined label="Second CA Score"></v-text-field>
+                           <v-text-field color="#5C6BC0" v-model="student_es" dense type="number" outlined label="Exam Score"></v-text-field>
+                           <v-btn block dark @click="addSubject" depressed tile color="#5C6BC0">add subject</v-btn>
+                         </v-card-text>
+                       </v-col>
+                       <v-col cols="3" v-if="studentResults.length">
+                         <v-card-text>
+                           <div v-for="(item, index) in studentResults" :key="index"  :class="$store.state.theme ? 'subtitle-2 grey lighten-3 mb-2 grey--text text-center' : 'subtitle-2  mb-2 grey--text text-center'">
+                          {{ item.subject_title }}
+                         </div>
+                         <v-btn block @click="handleResults" depressed tile text color="success">save results</v-btn>
+                         </v-card-text>
+                       </v-col>
+                     </v-row>
+                  </v-container>
+              </v-window-item>
+              <v-window-item :value="1">
                 <v-container class="">
                    <v-row>
-                     <v-col cols="12" class="text-right">
-                        <v-avatar size="80px"
-                        :color="avatarColor(studentData.payment_status)"
-                        >
-                             <span class=" display-1 white--text font-weight-semibold">{{studentData.name[0]}}</span>
-                           </v-avatar>
-                     </v-col>
                      <v-col cols="4" >
                            <v-card-subtitle>
                          <div class="">Student</div>
@@ -242,13 +280,35 @@
                          <v-text-field color="#5C6BC0" dense outlined label="Expected Amount" type="number" disabled v-model="expected_amount"></v-text-field>
                          <v-text-field color="#5C6BC0" dense outlined label="Payment Status"  disabled  v-model=" single_payment_status"></v-text-field>
                              <v-btn block dark class="mb-2" @click="updateStudent" :loading="loading"  text elevation="" color="primary">save</v-btn>
-                             <v-btn block dark class="mb-2" text elevation="" color="#5C6BC0">result</v-btn>
-                             <v-btn block dark class="mb-2" text elevation="" color="error">delete</v-btn>
+                             <v-btn block dark class="mb-2" @click="result = 3" text elevation="" color="#5C6BC0">results</v-btn>
+                             <v-btn block dark class="mb-2" @click="result = 2" text elevation="" color="success">add results</v-btn>
                        </v-card-text>
                      </v-col>
                      <!-- <v-col cols="12" ></v-col> -->
                    </v-row>
                  </v-container>
+                 </v-window-item>
+                   <v-window-item :value="3"> 
+                     <v-card-text>
+                         <v-data-table
+                    :headers="resultsHeaders"
+                    :items="studentResults"
+                    hide-actions
+                    pagination.sync="pagination"
+                    item-key="id"
+                    loading="true"
+                    items-per-page="5"
+                  >
+                    <template v-slot:item.exptotal="{ item }">  
+                    <div>{{ parseInt(item.exp_fcs) + parseInt(item.exp_scs) + parseInt(item.exp_es) }}</div>
+                    </template>
+                     <template v-slot:item.total="{ item }">  
+                    <div>{{ parseInt(item.fcs) + parseInt(item.scs) + parseInt(item.es) }}</div>
+                    </template>
+                  </v-data-table>
+                     </v-card-text>
+                </v-window-item>
+            </v-window>
           </v-card>
      </v-sheet>
    </v-bottom-sheet>
@@ -293,7 +353,22 @@ export default {
      kin_name,
      kin_address,
      kin_number,
-     amount_paid
+     amount_paid,
+     result,
+     fcs,
+    scs,
+    es,
+    student_fcs,
+    student_scs,
+    student_es,
+    tscore,
+    totalScore,
+    addSubject,
+    studentResults,
+    subjectTitle,
+    handleResults,
+    resultsHeaders,
+    results
       } = student() 
    
      const printDiv = () => {
@@ -340,7 +415,22 @@ export default {
      kin_name,
      kin_address,
      kin_number,
-     amount_paid
+     amount_paid,
+     result,
+     fcs,
+    scs,
+    es,
+    student_fcs,
+    student_scs,
+    student_es,
+    tscore,
+    totalScore,
+    addSubject,
+    subjectTitle,
+    studentResults,
+    handleResults,
+    resultsHeaders,
+    results
       }
    }
   

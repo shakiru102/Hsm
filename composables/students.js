@@ -11,10 +11,27 @@ const student = () => {
    const term_id = ref(store.state.hsm.current_term)
    const level = ref(route.value.params.level)
    const expected_amount = ref(0)
+   const result = ref(1)
+   const fcs = ref(20)
+   const scs = ref(20)
+   const es = ref(60)
+   const student_fcs = ref(1)
+   const student_scs = ref(0)
+   const student_es = ref(0)
+   const studentResults = ref([])
+   const subjectTitle = ref('')
+   
+   const tscore = ref(100)
+   const totalScore = computed(() => {
+     const sumtotal = parseInt(student_fcs.value) + parseInt(student_scs.value) + parseInt(student_es.value)
+    return sumtotal 
+  })
    onMounted(() => {
        const result = store.state.currentTerm.students_level.find(item => item.level == level.value)
         expected_amount.value = result.amount
        console.log(expected_amount)
+
+       studentResults.value = JSON.parse(localStorage.getItem('results'))
    })
     const  err_amount = ref('')
     const  err_gender = ref('')
@@ -141,6 +158,7 @@ const student = () => {
    { text: 'ST (pack)', value: 'starter_pack_abbr'},
    { text: 'Actions', value: 'actions', sortable: false}
  ])
+ 
   const levelDetails = computed(() => {
   const students =  store.state.allLevelDetails.filter( item => item.level == level.value)
   return students.map(student => {
@@ -180,6 +198,7 @@ const student = () => {
           bottomSheet.value = !bottomSheet.value
           singleStudentAmount.value = data.amount_paid_num
           studentData.value = data  
+          result.value = 1
   }
   const avatarColor = (status) => {
     if(studentData.value != null){
@@ -236,6 +255,42 @@ const student = () => {
       }
   }
 
+  const addSubject = () => {
+      const data = {
+         subject_title: subjectTitle.value,
+         exp_fcs: fcs.value,
+         exp_scs: scs.value,
+         exp_es: es.value,
+         fcs: student_fcs.value,
+         scs: student_scs.value,
+         es: student_es.value
+      }
+      studentResults.value = [...studentResults.value, data]
+      subjectTitle.value = ''
+      student_fcs.value = 0
+      student_scs.value = 0
+      student_es.value = 0
+
+  }
+
+  const resultsHeaders = ref([
+    { text: 'Subject', value: 'subject_title' },
+    { text: 'EXP 1st CA score', value: 'exp_fcs' },
+    { text: 'EXP 2nd CA score', value: 'exp_scs' },
+    { text: 'EXP exam score', value: 'exp_es' },
+    { text: 'EXP total score', value: 'exptotal' },
+    { text: '1st CA score', value: 'fcs' },
+    { text: '2nd CA score', value: 'scs' },
+    { text: 'Exam score', value: 'es' },
+    { text: 'Total score', value: 'total' },
+
+  ])
+
+  const handleResults = () => {
+    localStorage.setItem('results', JSON.stringify(studentResults.value))
+  }
+
+  const results = ref([])
 
  return {
   updateStudent,
@@ -270,7 +325,22 @@ const student = () => {
      kin_name,
      kin_address,
      kin_number,
-    amount_paid
+    amount_paid,
+    result,
+    fcs,
+    scs,
+    es,
+    student_fcs,
+    student_scs,
+    student_es,
+    tscore,
+    totalScore,
+    addSubject,
+    studentResults,
+    subjectTitle,
+    handleResults,
+    resultsHeaders,
+    results
 
  }
   

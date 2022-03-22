@@ -26,7 +26,10 @@ const utils = () => {
         const res = await $axios.get('/api/signout')
         if(res) router.push('/HSM')
     }
-
+    const signChange = () => {
+        logOption.value = !logOption.value
+        hiddenNav.value = !hiddenNav.value
+    }
 
     return {
         handleSignout,
@@ -37,6 +40,7 @@ const utils = () => {
         menu,
         logOption,
         toggle,
+        signChange
     }
 
 }

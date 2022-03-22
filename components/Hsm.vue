@@ -3,7 +3,7 @@
        <v-app-bar height="80px"  color="transparent" flat  dense dark>
             <v-spacer></v-spacer>
             <v-btn fab class="mr-3 mt-5" light  @click="hiddenNav = !hiddenNav"  >
-              <v-icon color="#5C6BC0"  >mdi-login-variant</v-icon>
+              <v-icon color="#E82F2F"  >mdi-login-variant</v-icon>
             </v-btn>
           </v-app-bar>
           <v-navigation-drawer
@@ -36,11 +36,11 @@
         <v-container class="">
             <v-row>
             <v-col>
-            <v-btn small type="submit"  :loading="loading"  elevation="" block  color="primary">login</v-btn>
+            <v-btn small type="submit"  :loading="loading"  elevation="" block dark color="#E82F2F">login</v-btn>
             </v-col>
-            <v-col>
+            <!-- <v-col>
             <v-btn small elevation="" block @click="logOption = !logOption"  color="success">signup</v-btn>
-            </v-col>
+            </v-col> -->
             </v-row>
         </v-container>
     </form>
@@ -62,7 +62,7 @@ methods: {
 },
  setup(props){
    const { changeBar } = props
-     const { hiddenNav, logOption } = utils()
+     const { hiddenNav, logOption, signChange } = utils()
          const {
     passRule,
     emailRule,
@@ -103,7 +103,8 @@ methods: {
     loading,
     login,
     loginschool_email,
-    loginschool_password
+    loginschool_password,
+    signChange
 
        }
  }
