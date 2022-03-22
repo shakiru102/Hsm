@@ -1,6 +1,9 @@
 <template>
   <nav>
        <v-app-bar height="80px"  color="transparent" flat  dense dark>
+         <v-app-bar-title class="pt-13">
+           <v-img  :src="require('@/assets/demlinks_b-removebg-preview 1.png')"  ></v-img>
+         </v-app-bar-title>
             <v-spacer></v-spacer>
             <v-btn fab class="mr-3 mt-5" light  @click="hiddenNav = !hiddenNav"  >
               <v-icon color="#E82F2F"  >mdi-login-variant</v-icon>
